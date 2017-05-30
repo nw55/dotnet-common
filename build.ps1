@@ -9,7 +9,7 @@
 .EXAMPLE
   exec { svn info $repository_trunk } "Error executing SVN. Please verify SVN command-line client is installed"
 #>
-function Exec  
+function Exec
 {
     [CmdletBinding()]
     param(
@@ -24,11 +24,10 @@ function Exec
 
 if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
 
-exec { & dotnet restore }
-
-exec { & dotnet build }
-
 $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
-$revision = "{0:D4}" -f [convert]::ToInt32($revision, 10)
 
-exec { & dotnet pack -c Release -o $PSScriptRoot\artifacts --version-suffix $revision }
+exec { & dotnet restore /property:BuildNumber=$revision }
+
+exec { & dotnet build /property:BuildNumber=$revision }
+
+exec { & dotnet pack -c Release -o $PSScriptRoot\artifacts --no-build /property:BuildNumber=$revision }

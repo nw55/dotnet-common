@@ -1,0 +1,26 @@
+<Project>
+
+  <PropertyGroup>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Niklas Werner (NW55)</Authors>
+    <Copyright>Copyright © Niklas Werner 2017</Copyright>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <Company />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PaddedBuildNumber Condition=" '$(BuildNumber)' != '' ">$(BuildNumber.PadLeft(4, '0'))</PaddedBuildNumber>
+    <VersionSuffix Condition=" '$(VersionSuffix)' != '' AND '$(BuildNumber)' != '' ">$(VersionSuffix)-$(PaddedBuildNumber)</VersionSuffix>
+    <Version>$(VersionPrefix)</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <AssemblyVersion Condition=" '$(BuildNumber)' != '' ">$(VersionPrefix).$(BuildNumber)</AssemblyVersion>
+    <AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+  </PropertyGroup>
+
+</Project>
