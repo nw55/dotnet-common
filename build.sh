@@ -15,6 +15,6 @@ revision=${TRAVIS_JOB_ID:=1}
 
 dotnet restore /property:BuildNumber=$revision
 
-dotnet build
+dotnet build -c Release /property:BuildNumber=$revision
 
-dotnet pack -c Release -o "$artifactsDir" --no-build 
+dotnet pack -c Release -o "$artifactsDir" --no-build /property:BuildNumber=$revision
