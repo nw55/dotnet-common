@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\shared.props" />
+  <Import Project="..\..\common.props" />
   
   <PropertyGroup>
     <RootNamespace>NW55.Collections</RootNamespace>
@@ -10,5 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\NW55.Core\NW55.Core.csproj" />
   </ItemGroup>
-  
+
+  <Import Project="..\..\common.targets" />
 </Project>
