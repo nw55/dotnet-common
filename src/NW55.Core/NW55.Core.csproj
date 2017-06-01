@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="..\..\shared.props" />
+  <Import Project="..\..\common.props" />
 
   <PropertyGroup>
     <RootNamespace>NW55</RootNamespace>
     <Description>NW55 Common Core Classes</Description>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-  
+
+  <Import Project="..\..\common.targets" />
 </Project>

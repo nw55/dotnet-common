@@ -1,33 +1,22 @@
-# Taken from psake https://github.com/psake/psake
-
-<#  
-.SYNOPSIS
-  This is a helper function that runs a scriptblock and checks the PS variable $lastexitcode
-  to see if an error occcured. If an error is detected then an exception is thrown.
-  This function allows you to run command-line programs without having to
-  explicitly check the $lastexitcode variable.
-.EXAMPLE
-  exec { svn info $repository_trunk } "Error executing SVN. Please verify SVN command-line client is installed"
-#>
-function Exec
-{
-    [CmdletBinding()]
+function exec {
     param(
-        [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,
-        [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ($msgs.error_bad_command -f $cmd)
+        [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd
     )
+
     & $cmd
     if ($lastexitcode -ne 0) {
-        throw ("Exec: " + $errorMessage)
+        throw ("Exec: " + $lastexitcode)
     }
 }
 
-if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
+$artifactsDir="$PSScriptRoot\artifacts"
 
-$revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
+if(Test-Path $artifactsDir) { Remove-Item $artifactsDir -Force -Recurse }
 
-exec { & dotnet restore /property:BuildNumber=$revision }
+$build_number = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 
-exec { & dotnet build -c Release /property:BuildNumber=$revision }
+exec { dotnet restore --verbosity normal /property:BuildNumber=$build_number }
 
-exec { & dotnet pack -c Release -o $PSScriptRoot\artifacts --no-build /property:BuildNumber=$revision }
+exec { dotnet build --configuration Release --verbosity normal /property:BuildNumber=$build_number }
+
+exec { dotnet pack --configuration Release --output "$artifactsDir" --no-build --verbosity normal /property:BuildNumber=$build_number }
