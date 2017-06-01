@@ -21,9 +21,9 @@
     <FileVersion Condition=" '$(BuildNumber)' != '' ">$(FileVersion).$(BuildNumber)</FileVersion>
   </PropertyGroup>
 
-  <Target Name="DisplayVersionInformation" BeforeTargets="CoreBuild">
-    <Message Text="Version: $(Version)" Importance="high" />
-    <Message Text="AssemblyVersion: $(AssemblyVersion)" Importance="high" />
-    <Message Text="FileVersion: $(FileVersion)" Importance="high" />
+  <Target Name="DisplayVersionInformation" BeforeTargets="Build">
+    <Message Text="Version: $(Version)" />
+    <Message Text="AssemblyVersion: $(AssemblyVersion)" />
+    <Message Text="FileVersion: $(FileVersion)" />
   </Target>
 </Project>

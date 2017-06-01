@@ -11,10 +11,10 @@ if [ -d artifactsDir ]; then
   rm -R artifactsDir
 fi
 
-revision=${TRAVIS_JOB_ID:=1}
+build_number=${TRAVIS_BUILD_NUMBER:=1}
 
-dotnet restore /property:BuildNumber=$revision
+dotnet restore --verbosity normal /property:BuildNumber=$build_number
 
-dotnet build -c Release /property:BuildNumber=$revision
+dotnet build --configuration Release --verbosity normal /property:BuildNumber=$build_number
 
-dotnet pack -c Release -o "$artifactsDir" --no-build /property:BuildNumber=$revision
+dotnet pack --configuration Release --output "$artifactsDir" --no-build --verbosity normal /property:BuildNumber=$build_number

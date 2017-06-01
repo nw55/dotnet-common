@@ -9,12 +9,14 @@ function exec {
     }
 }
 
-if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
+$artifactsDir="$PSScriptRoot\artifacts"
 
-$revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
+if(Test-Path $artifactsDir) { Remove-Item $artifactsDir -Force -Recurse }
 
-exec { dotnet restore /property:BuildNumber=$revision }
+$build_number = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 
-exec { dotnet build -c Release /property:BuildNumber=$revision }
+exec { dotnet restore --verbosity normal /property:BuildNumber=$build_number }
 
-exec { dotnet pack -c Release -o $PSScriptRoot\artifacts --no-build /property:BuildNumber=$revision }
+exec { dotnet build --configuration Release --verbosity normal /property:BuildNumber=$build_number }
+
+exec { dotnet pack --configuration Release --output "$artifactsDir" --no-build --verbosity normal /property:BuildNumber=$build_number }
