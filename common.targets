@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <_BaseVersion>$(MajorVersion).$(MinorVersion)</_BaseVersion>
+
+    <PatchVersion Condition=" '$(PatchVersion)' == '' ">0</PatchVersion>
+
+    <VersionPrefix>$(_BaseVersion).$(PatchVersion)</VersionPrefix>
+
+    <VersionSuffix>$(VersionLabel)</VersionSuffix>
+    <VersionSuffix Condition=" '$(VersionLabel)' != '' AND '$(BuildNumber)' != '' ">$(VersionLabel)-$(BuildNumber)</VersionSuffix>
+
+    <Version>$(VersionPrefix)</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+
+    <AssemblyVersion>$(_BaseVersion).0.0</AssemblyVersion>
+
+    <AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+
+    <FileVersion>$(VersionPrefix)</FileVersion>
+    <FileVersion Condition=" '$(BuildNumber)' == '' ">$(FileVersion).0</FileVersion>
+    <FileVersion Condition=" '$(BuildNumber)' != '' ">$(FileVersion).$(BuildNumber)</FileVersion>
+  </PropertyGroup>
+
+  <Target Name="DisplayVersionInformation" BeforeTargets="CoreBuild">
+    <Message Text="Version: $(Version)" Importance="high" />
+    <Message Text="AssemblyVersion: $(AssemblyVersion)" Importance="high" />
+    <Message Text="FileVersion: $(FileVersion)" Importance="high" />
+  </Target>
+</Project>
